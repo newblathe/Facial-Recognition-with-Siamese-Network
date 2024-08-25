@@ -300,7 +300,8 @@ This section provides an overview of how images are verified against a set of ve
 
 To get started with this model:
 
-* **Clone the Repository:** Clone this repository to your local machine using Git.  
+* **Clone the Repository:** Clone this repository to your local machine using Git.
+* **Create Folder:** Create the `training_checkpoints` folder and the `application_data` folder with subfolders `verification_images` and `input_image` inside it.  
 * **Run the Jupyter Notebook:** Open the provided Jupyter notebook “Facial Recognition with Siamese Network” in your Jupyter environment and just run it.  
 * **Capture Images:**  
   * **Anchors and Positives:** Use the built-in code in Section 5.2 of the notebook to capture images from your webcam (Ensure that images are captured without any facial accessories).  
