@@ -1,44 +1,41 @@
 # **One-Shot Facial Verification Model Using Siamese Network**
 
-## **Table of Contents**
+## Table of Contents
 
-1. [Introduction](#1-introduction)  
-2. [Importing the Dependencies](#2-importing-the-dependencies)  
-   1. [OpenCV (cv2)](#21-opencv-cv2)  
-   2. [OS Module (os)](22-os-module-os)  
-   3. [NumPy (np)](#23-numpy-np)  
-   4. [Random (random)](#24-random-random)  
-   5. [Matplotlib (matplotlib.pyplot)](#25-matplotlib-matplotlib.pyplot)  
-   6. [TensorFlow and Keras (tensorflow.keras)](26-tensorflow-and-keras-tensorflow.keras)  
-   7. [UUID (uuid)](#2.7-uuid-(uuid))  
-3. [Dataset Overview](#3.-dataset-overview)  
-   1. [Moving LFW Images to Negatives](#3.1-moving-lfw-images-to-negatives-(section-5.1))  
-   2. [Capturing Images via Webcam](#3.2-capturing-images-via-webcam-(section-5.2))  
-   3. [Image Augmentation](#3.3-image-augmentation-(section-5.3)-(used-in-“siamese\_modelv2.h5”))  
-   4. [Adjusting Brightness and Augmenting Images](#3.4-adjusting-brightness-and-augmenting-images-(section-5.3))  
-4. [Dataset Preparation and Processing](#4.-dataset-preparation-and-processing)  
-   1. [Dataset Creation](#4.1-dataset-creation-(section-6.1))  
-   2. [Preprocessing Function](#4.2-preprocessing-function-(section-6.2))  
-   3. [Dataset Labeling](#4.3-dataset-labeling-(section-6.3))  
-   4. [Dataset Preparation](#4.4-dataset-preparation-(section-6.4))  
-5. [Model Overview](#5.-model-overview)  
-   1. [Embedding Model](#5.1-embedding-model-(section-7.1))  
-   2. [L1Dist Layer](#5.2-l1dist-layer-(section-7.2))  
-   3. [Siamese Model](#5.3-siamese-model-(section-7.3))  
-6. [Training the Model](#6.-training-the-model)  
-   1. [Components](#6.1-components)  
-      * Loss Function and Optimizer  
-      * Checkpoints  
-      * Gradient Calculation  
-   2. [Training Loop](#6.2-training-loop-(section-8.4))  
-7. [Evaluating the Model](#7.-evaluating-the-model)  
-   1. [Workflow](#7.1-workflow)  
-8. [Saving the Model](#8.-saving-the-model)  
-9. [Image Verification](#9.-image-verification)  
-   1. [Verification Function](#9.1-verification-function-(section-11.1))  
-   2. [Webcam Capture and Verification](#9.2-webcam-capture-and-verification-(section-11.2))
-
-10\.  [Accessing and Training the mode](\#10.-accessing-and-training-the-model)l
+- [**1. Introduction**](#1-introduction)
+- [**2. Importing the Dependencies**](#2-importing-the-dependencies)
+  - [**2.1 OpenCV (cv2)**](#21-opencv-cv2)
+  - [**2.2 OS Module (os)**](#22-os-module-os)
+  - [**2.3 NumPy (np)**](#23-numpy-np)
+  - [**2.4 Random (random)**](#24-random-random)
+  - [**2.5 Matplotlib (matplotlib.pyplot)**](#25-matplotlib-matplotlibpyplot)
+  - [**2.6 TensorFlow and Keras (tensorflow.keras)**](#26-tensorflow-and-keras-tensorflowkeras)
+  - [**2.7 UUID (uuid)**](#27-uuid-uuid)
+  - [**Additional Sections:**](#additional-sections)
+- [**3. Dataset Overview**](#3-dataset-overview)
+  - [**3.1 Moving LFW Images to Negatives (Section 5.1)**](#31-moving-lfw-images-to-negatives-section-51)
+  - [**3.2 Capturing Images via Webcam (Section 5.2)**](#32-capturing-images-via-webcam-section-52)
+  - [**3.3 Image Augmentation (Section 5.3) (used in “siamese_modelv2.h5”)**](#33-image-augmentation-section-53-used-in-siamese_modelv2h5)
+  - [**3.4 Adjusting Brightness and Augmenting Images (Section 5.3)**](#34-adjusting-brightness-and-augmenting-images-section-53)
+- [**4. Dataset Preparation and Processing**](#4-dataset-preparation-and-processing)
+  - [**4.1 Dataset Creation (Section 6.1)**](#41-dataset-creation-section-61)
+  - [**4.2 Preprocessing Function (Section 6.2)**](#42-preprocessing-function-section-62)
+  - [**4.3 Dataset Labeling (Section 6.3)**](#43-dataset-labeling-section-63)
+  - [**4.4 Dataset Preparation (Section 6.4)**](#44-dataset-preparation-section-64)
+- [**5. Model Overview**](#5-model-overview)
+  - [**5.1 Embedding Model (Section 7.1)**](#51-embedding-model-section-71)
+  - [**5.2 L1Dist Layer (Section 7.2)**](#52-l1dist-layer-section-72)
+  - [**5.3 Siamese Model (Section 7.3)**](#53-siamese-model-section-73)
+- [**6. Training the Model**](#6-training-the-model)
+  - [**6.1 Components**](#61-components)
+  - [**6.2 Training Loop (Section 8.4)**](#62-training-loop-section-84)
+- [**7. Evaluating the Model**](#7-evaluating-the-model)
+  - [**7.1 Workflow**](#71-workflow)
+- [**8. Saving the Model**](#8-saving-the-model)
+- [**9. Image Verification**](#9-image-verification)
+  - [**9.1 Verification Function (Section 11.1)**](#91-verification-function-section-111)
+  - [**9.2 Webcam Capture and Verification (Section 11.2)**](#92-webcam-capture-and-verification-section-112)
+- [**10. Accessing and Training the Model**](#10-accessing-and-training-the-model)
 
 ## **1. Introduction**
 
@@ -59,28 +56,28 @@ This repository contains the implementation of a one-shot facial verification mo
 * **Purpose**:  
   * Interact with the file system, including creating and navigating directories and managing file paths.
 
-### **2.3 NumPy (np)** {#2.3-numpy-(np)}
+### **2.3 NumPy (np)**
 
 * **Purpose**:  
   * Perform numerical operations on arrays, such as manipulating image data and handling predictions.
 
-### **2.4 Random (random)** {#2.4-random-(random)}
+### **2.4 Random (random)**
 
 * **Purpose**:  
   * Generate random numbers, useful for any randomization tasks, though it’s not explicitly used in the current script.
 
-### **2.5 Matplotlib (matplotlib.pyplot)** {#2.5-matplotlib-(matplotlib.pyplot)}
+### **2.5 Matplotlib (matplotlib.pyplot)**
 
 * **Purpose**:  
   * Plot and visualize data, though it's included here for potential use in displaying images or results.
 
-### **2.6 TensorFlow and Keras (tensorflow.keras)** {#2.6-tensorflow-and-keras-(tensorflow.keras)}
+### **2.6 TensorFlow and Keras (tensorflow.keras)**
 
 * **Purpose**:  
   * Build and train deep learning models.  
   * Provides tools like Model, Layer, and various neural network layers (Conv2D, MaxPooling2D, Flatten, Dense, Input) for constructing the Siamese network.
 
-### **2.7 UUID (uuid)** {#2.7-uuid-(uuid)}
+### **2.7 UUID (uuid)**
 
 * **Purpose**:  
   * Generate unique identifiers, specifically used here to create unique names for saved images.
@@ -90,15 +87,15 @@ This repository contains the implementation of a one-shot facial verification mo
 * **Section 3**: Limits GPU growth.  
 * **Section 4**: Deals with making the file structure.
 
-## **3**. **Dataset Overview** {#3.-dataset-overview}
+## **3. Dataset Overview**
 
 This section details how the dataset was created, including capturing, augmenting, and processing images for training the one-shot facial verification model.
 
-#### **3.1 Moving LFW Images to Negatives (Section 5.1)** {#3.1-moving-lfw-images-to-negatives-(section-5.1)}
+#### **3.1 Moving LFW Images to Negatives (Section 5.1)**
 
 * The Labeled Faces in the Wild (LFW) dataset is extracted from a tarball file (`lfw.tgz`), and all images are moved to the negatives folder (`NEG_PATH`).
 
-#### **3.2 Capturing Images via Webcam (Section 5.2)** {#3.2-capturing-images-via-webcam-(section-5.2)}
+#### **3.2 Capturing Images via Webcam (Section 5.2)**
 
 * **Video Capture**: Images are captured using the system's webcam. The captured frames are processed using Haar Cascade classifiers to detect faces. The detected face regions are then cropped and resized to 250x250 pixels.  
 * **Capturing Anchors**:  
@@ -108,12 +105,12 @@ This section details how the dataset was created, including capturing, augmentin
 * **Exiting**:  
   * Pressing "e" exits the capture loop, releasing the webcam.
 
-#### **3.3 Image Augmentation (Section 5.3) (used in “siamese\_modelv2.h5”)** {#3.3-image-augmentation-(section-5.3)-(used-in-“siamese_modelv2.h5”)}
+#### **3.3 Image Augmentation (Section 5.3) (used in “siamese\_modelv2.h5”)**
 
 * **Augmentation Function:**:  
   * An `augment` function is defined to apply various transformations to the images, such as brightness adjustment, horizontal flipping, contrast adjustment, JPEG quality adjustment, and saturation adjustment. Each image undergoes five different augmentations, ensuring diversity in the dataset.
 
-####  **3.4 Adjusting Brightness and Augmenting Images (Section 5.3)** {#3.4-adjusting-brightness-and-augmenting-images-(section-5.3)}
+####  **3.4 Adjusting Brightness and Augmenting Images (Section 5.3)**
 
 * **Anchor Images**:  
   * Some anchor images have their brightness reduced using TensorFlow's image adjustment functions. These adjusted images are saved back into the anchor directory.  
@@ -122,11 +119,11 @@ This section details how the dataset was created, including capturing, augmentin
   * Similar to the anchor images, some positive images have their brightness reduced and are saved back into the positives directory.  
   * These images are then augmented, with the augmented versions saved back into the positives directory.
 
-## **4\. Dataset Preparation and Processing** {#4.-dataset-preparation-and-processing}
+## **4\. Dataset Preparation and Processing**
 
 The dataset preparation and processing are detailed throughout Section 6\.
 
-### **4.1 Dataset Creation (Section 6.1)** {#4.1-dataset-creation-(section-6.1)}
+### **4.1 Dataset Creation (Section 6.1)**
 
 * **Anchor Images**:  
   * Loaded from `ANC_PATH`, taking 3,684 images and shuffled with a buffer size of 3,000.  
@@ -135,12 +132,12 @@ The dataset preparation and processing are detailed throughout Section 6\.
 * **Negative Images**:  
   * Loaded from `NEG_PATH`, taking 3,884 images and shuffled with a buffer size of 3,000.
 
-### **4.2 Preprocessing Function (Section 6.2)** {#4.2-preprocessing-function-(section-6.2)}
+### **4.2 Preprocessing Function (Section 6.2)**
 
 * **`preprocess(file_path)`**:  
   * Reads, decodes, resizes, and normalizes images to 100x100 pixels and scales pixel values to \[0, 1\].
 
-### **4.3 Dataset Labeling (Section 6.3)** {#4.3-dataset-labeling-(section-6.3)}
+### **4.3 Dataset Labeling (Section 6.3)**
 
 * **Positive Pairs**:  
   * Zipped with anchor images and labeled with `1` (indicating similarity).  
@@ -150,7 +147,7 @@ The dataset preparation and processing are detailed throughout Section 6\.
   * **Concatenate**: Combines positive and negative datasets.  
   * **`preprocess_two(input_image, validation_image, label)`**: Applies preprocessing to both images in each pair and retains the label.
 
-### **4.4 Dataset Preparation (Section 6.4)** {#4.4-dataset-preparation-(section-6.4)}
+### **4.4 Dataset Preparation (Section 6.4)**
 
 * **Cache**:  
   * Caches the dataset for faster access.  
@@ -162,11 +159,11 @@ The dataset preparation and processing are detailed throughout Section 6\.
   * **Testing Data**:  
     * Takes 30% of the dataset, batches it with a batch size of 16, and prefetches 8 batches.
 
-## **5\. Model Overview** {#5.-model-overview}
+## **5. Model Overview**
 
 This section provides an overview of the model implemented throughout **Section 7**.
 
-### **5.1 Embedding Model (Section 7.1)** {#5.1-embedding-model-(section-7.1)}
+### **5.1 Embedding Model (Section 7.1)**
 
 * **Purpose**:  
   * **Feature Extraction**: Extracts key features of the image.  
@@ -184,7 +181,7 @@ This section provides an overview of the model implemented throughout **Section 
   * Flatten layer.  
   * Dense layer with 4096 units (sigmoid activation).
 
-### **5.2 L1Dist Layer (Section 7.2)** {#5.2-l1dist-layer-(section-7.2)}
+### **5.2 L1Dist Layer (Section 7.2)**
 
 * **Purpose**:  
   * **Similarity Measurement**: Determines how close or different two images are by comparing their embeddings.  
@@ -195,7 +192,7 @@ This section provides an overview of the model implemented throughout **Section 
 * **Use in Facial Verification**:  
   * A small L1 distance suggests the images are of the same person, while a larger distance indicates they are different.
 
-### **5.3 Siamese Model (Section 7.3)** {#5.3-siamese-model-(section-7.3)}
+### **5.3 Siamese Model (Section 7.3)**
 
 * **Purpose**:  
   * Evaluates the similarity between two images by comparing their feature embeddings.  
@@ -208,11 +205,11 @@ This section provides an overview of the model implemented throughout **Section 
 * **Use in Facial Verification**:  
   * Produces a similarity score: a score close to `1` indicates the images are likely of the same person, while a score close to `0` indicates they are different.
 
-## **6\. Training the Model** {#6.-training-the-model}
+## **6. Training the Model**
 
 This provides an overview of the model training process detailed in **Section 8**.
 
-### **6.1 Components** {#6.1-components}
+### **6.1 Components**
 
 * **Loss Function and Optimizer (Section 8.1)**:  
   * **Binary Cross-Entropy**: Used to compute the loss between predicted similarity scores and actual labels.  
@@ -228,7 +225,7 @@ This provides an overview of the model training process detailed in **Section 8*
     * Applies gradients to update model weights.  
   * **Returns**: The computed loss value.
 
-### **6.2 Training Loop (Section 8.4)** {#6.2-training-loop-(section-8.4)}
+### **6.2 Training Loop (Section 8.4)**
 
 * **Function**: `train(data, EPOCHS)`  
 * **Parameters**:  
@@ -241,11 +238,11 @@ This provides an overview of the model training process detailed in **Section 8*
   * Calculates the Precision, and Recall metrics for each epoch.  
   * Saves checkpoints every 10 epochs.
 
-## **7\. Evaluating the Model** {#7.-evaluating-the-model}
+## **7. Evaluating the Model**
 
 This section provides an overview of the model evaluation process detailed in **Section 9**.
 
-### **7.1 Workflow** {#7.1-workflow}
+### **7.1 Workflow**
 
 * **Initialize Metrics**:  
   * **Recall()**: Captures how many actual positives were correctly identified.  
@@ -257,15 +254,15 @@ This section provides an overview of the model evaluation process detailed in **
 * **Output**:  
   * Print the final Recall and Precision values.
 
-## **8\. Saving the Model** {#8.-saving-the-model}
+## **8. Saving the Model**
 
 * **Section 10**: Deals with saving the model in the `models` folder.
 
-## **9\. Image Verification** {#9.-image-verification}
+## **9. Image Verification**
 
 This section provides an overview of how images are verified against a set of verification images, implemented in Section 11\.
 
-### **9.1 Verification Function (Section 11.1)** {#9.1-verification-function-(section-11.1)}
+### **9.1 Verification Function (Section 11.1)**
 
 * **Function**: `verification(model, detection_threshold, verification_threshold)`  
 * **Purpose**:  
@@ -286,7 +283,7 @@ This section provides an overview of how images are verified against a set of ve
   * `results`: A list of similarity scores.  
   * `verified`: A boolean indicating if the verification passed.
 
-### **9.2 Webcam Capture and Verification (Section 11.2)** {#9.2-webcam-capture-and-verification-(section-11.2)}
+### **9.2 Webcam Capture and Verification (Section 11.2)**
 
 * **Process**:  
   * **Capture Frames**:  
@@ -299,7 +296,7 @@ This section provides an overview of how images are verified against a set of ve
 * **Output**:  
   * Displays "You are verified" if the verification passes, otherwise "Unverified".
 
-## **10\. Accessing and Training the Model** {#10.-accessing-and-training-the-model}
+## **10. Accessing and Training the Model**
 
 To get started with this model:
 
