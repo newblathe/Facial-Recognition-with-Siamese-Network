@@ -1,4 +1,4 @@
-# **One-Shot Facial Verification Model Using Siamese Network**
+# **One-Shot Facial Verification Model**
 
 ## Table of Contents
 
